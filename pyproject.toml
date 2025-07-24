@@ -1,0 +1,7 @@
+[project]
+name = "weber-django"
+version = "0.1.0"
+description = "Proyecto de ejemplo para aprender a usar Django"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
