@@ -1,28 +1,53 @@
-# Python-generated files
+# --- Python ---
 __pycache__/
-*.py[oc]
-*.py[cod]
-build/
-dist/
-wheels/
-*.egg-info
+*.py[ocd]
 *$py.class
+*.pyc
+*.pyo
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+wheels/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+share/python-wheels/
+MANIFEST
+.Python
+develop-eggs/
+downloads/
+.installed.cfg
 
-# Virtual environments
+# --- Entornos virtuales ---
 .venv/
 env/
 ENV/
 venv/
 env.bak/
 venv.bak/
+__pypackages__/
 
 # Archivos de la base de datos de desarrollo
 *.sqlite3
 db.sqlite3
+db.sqlite3-journal
+*.log
+*.pot
+*.mo
+*.tmp
+*.bak
+*.swp
+*.swo
 
-# Archivos de configuración local (secretos)
+# --- Archivos de configuración local y secretos ---
 .env
 .env.*
+local_settings.py
 
 # Directorios de medios y estáticos (los generados)
 /media/
@@ -36,6 +61,9 @@ db.sqlite3
 # Archivos de IDEs
 .idea/
 .vscode/
+.spyderproject
+.spyproject
+.ropeproject
 
 # Archivos de migraciones de Django
 **/migrations/*.pyc
@@ -47,13 +75,7 @@ db.sqlite3
 **/migrations/0001_initial.py
 **/migrations/0002_*.py
 
-# Otros archivos temporales
-*.swp
-*.swo
-*.bak
-*.tmp
-
-# Archivos de test coverage
+# --- Cobertura y pruebas ---
 htmlcov/
 .coverage
 .coverage.*
@@ -62,6 +84,32 @@ nosetests.xml
 coverage.xml
 *.cover
 *.py,cover
+.pytest_cache/
+.tox/
+.nox/
+.hypothesis/
+cover/
 
 # Archivos de configuración de pytest
 .pytest_cache/
+
+# --- Otros ---
+pip-log.txt
+pip-delete-this-directory.txt
+celerybeat-schedule
+celerybeat.pid
+.scrapy
+.webassets-cache
+docs/_build/
+.pybuilder/
+target/
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+.site
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+cython_debug/
