@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     # Apps de la aplicación
     'ubicaciones.apps.UbicacionesConfig',
     'productos.apps.ProductosConfig',
+    'organizacion.apps.OrganizacionConfig',
+    'usuarios.apps.UsuariosConfig',
 
     # Paquetes de terceros
     'import_export',

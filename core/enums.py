@@ -62,3 +62,26 @@ class EstadoProducto(str, enum.Enum):
     @classmethod
     def choices(cls):
         return [(key.value, key.name.replace('_', ' ').capitalize()) for key in cls]
+
+class TipoEmpresa(str, enum.Enum):
+    PERSONA_NATURAL = 'Persona Natural'
+    SAS = 'SAS'
+    LTDA = 'LTDA'
+    SA = 'SA'
+    COOPERATIVA = 'Cooperativa'
+    FUNDACION = 'Fundación'
+    OTRO = 'Otro'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.replace('_', ' ').capitalize()) for key in cls]
+
+class TipoSucursal(str, enum.Enum):
+    PRINCIPAL = 'Principal'
+    SUBSEDE = 'Subsede'
+    PUNTO_DE_VENTA = 'Punto de Venta'
+    BODEGA = 'Bodega'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.replace('_', ' ').capitalize()) for key in cls]
