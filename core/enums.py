@@ -85,3 +85,47 @@ class TipoSucursal(str, enum.Enum):
     @classmethod
     def choices(cls):
         return [(key.value, key.name.replace('_', ' ').capitalize()) for key in cls]
+
+class TipoDocumento(str, enum.Enum):
+    CC = 'Cédula de Ciudadanía'
+    CE = 'Cédula de Extranjería'
+    TI = 'Tarjeta de Identidad'
+    RC = 'Registro Civil'
+    PAS = 'Pasaporte'
+    NIT = 'NIT'
+    PPT = 'Permiso por Protección Temporal'
+
+    @classmethod
+    def choices(cls):
+        return [(key.name, key.value) for key in cls]
+
+class Genero(str, enum.Enum):
+    MASCULINO = 'Masculino'
+    FEMENINO = 'Femenino'
+    OTRO = 'Otro'
+    NO_ESPECIFICA = 'No especifica'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.replace('_', ' ').capitalize()) for key in cls]
+
+class RolNegocio(str, enum.Enum):
+    SUPERADMIN = 'SuperAdmin'
+    ADMINISTRADOR = 'Administrador'
+    EMPLEADO = 'Empleado'
+    CLIENTE = 'Cliente'
+    PROVEEDOR = 'Proveedor'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.capitalize()) for key in cls]
+
+class EstadoUsuario(str, enum.Enum):
+    ACTIVO = 'Activo'
+    INACTIVO = 'Inactivo'
+    SUSPENDIDO = 'Suspendido'
+    BLOQUEADO = 'Bloqueado'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.capitalize()) for key in cls]
