@@ -52,3 +52,13 @@ class Region(str, enum.Enum):
     @classmethod
     def choices(cls):
         return [(key.name, key.value) for key in cls]
+
+class EstadoProducto(str, enum.Enum):
+    ACTIVO = 'Activo'
+    INACTIVO = 'Inactivo'
+    DESCONTINUADO = 'Descontinuado'
+    AGOTADO = 'Agotado'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.replace('_', ' ').capitalize()) for key in cls]

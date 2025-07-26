@@ -44,8 +44,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core.apps.CoreConfig', # Registra la app 'core'
+    'core.apps.CoreConfig',
+
+    # Apps de la aplicación
     'ubicaciones.apps.UbicacionesConfig',
+    'productos.apps.ProductosConfig',
 
     # Paquetes de terceros
     'import_export',

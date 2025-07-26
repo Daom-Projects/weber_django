@@ -20,6 +20,19 @@ class DepartamentoAdmin(admin.ModelAdmin):
     # Paginación: cuántos items por página
     list_per_page = 20
 
+        # Acción personalizada para activar registros en lote
+    @admin.action(description="Marcar seleccionados como Activo")
+    def hacer_activos(self, request, queryset):
+        queryset.update(estado=EstadoGeneral.ACTIVO)
+
+    # Acción personalizada para inactivar registros en lote
+    @admin.action(description="Marcar seleccionados como Inactivo")
+    def hacer_inactivos(self, request, queryset):
+        queryset.update(estado=EstadoGeneral.INACTIVO)
+
+    # Hacemos que las acciones estén disponibles en el admin
+    actions = ['hacer_activos', 'hacer_inactivos']
+
 @admin.register(Municipio)
 class MunicipioAdmin(admin.ModelAdmin):
     """
