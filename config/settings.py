@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'productos.apps.ProductosConfig',
     'organizacion.apps.OrganizacionConfig',
     'usuarios.apps.UsuariosConfig',
+    'transacciones.apps.TransaccionesConfig',
 
     # Paquetes de terceros
     'import_export',

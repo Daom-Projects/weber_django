@@ -129,3 +129,64 @@ class EstadoUsuario(str, enum.Enum):
     @classmethod
     def choices(cls):
         return [(key.value, key.name.capitalize()) for key in cls]
+
+class MetodoPago(str, enum.Enum):
+    EFECTIVO = 'Efectivo'
+    TARJETA_DEBITO = 'Tarjeta Debito'
+    TARJETA_CREDITO = 'Tarjeta Credito'
+    TRANSFERENCIA = 'Transferencia'
+    CREDITO = 'Credito'
+    MIXTO = 'Mixto'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.replace('_', ' ').capitalize()) for key in cls]
+
+class EstadoTransaccion(str, enum.Enum):
+    BORRADOR = 'Borrador'
+    EN_PROCESO = 'En_Proceso'
+    FINALIZADA = 'Finalizada'
+    CANCELADA = 'Cancelada'
+    ANULADA = 'Anulada'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.replace('_', ' ').capitalize()) for key in cls]
+
+class TipoTransaccion(str, enum.Enum):
+    VENTA = 'Venta'
+    COMPRA = 'Compra'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.capitalize()) for key in cls]
+
+class MotivoDevolucion(str, enum.Enum):
+    PRODUCTO_DEFECTUOSO = 'Producto Defectuoso'
+    ERROR_CANTIDAD = 'Error Cantidad'
+    ERROR_PRODUCTO = 'Error Producto'
+    CLIENTE_NO_SATISFECHO = 'Cliente No Satisfecho'
+    VENCIMIENTO = 'Vencimiento'
+    OTRO = 'Otro'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.replace('_', ' ').capitalize()) for key in cls]
+
+class TipoDevolucion(str, enum.Enum):
+    VENTA = 'Venta'
+    COMPRA = 'Compra'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.capitalize()) for key in cls]
+
+class EstadoDevolucion(str, enum.Enum):
+    PENDIENTE = 'Pendiente'
+    PROCESADA = 'Procesada'
+    CANCELADA = 'Cancelada'
+    RECHAZADA = 'Rechazada'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.capitalize()) for key in cls]
