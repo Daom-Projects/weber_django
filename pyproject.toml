@@ -6,12 +6,12 @@ readme = "README.md"
 requires-python = ">=3.13"
 license = { file = "LICENSE.txt" }
 keywords = ["django", "web", "weber", "inventarios"]
-authors = [
-    { name = "Diego Alonso Ojeda Medina", email = "daom89@gmail.com" },
-]
+authors = [{ name = "Diego Alonso Ojeda Medina", email = "daom89@gmail.com" }]
 dependencies = [
     "django>=5.2.4",
     "django-environ>=0.12.0",
+    "django-import-export[all]>=4.3.9",
+    "django-safedelete>=1.4.1",
 ]
 
 [project.urls]
@@ -22,9 +22,7 @@ Issues = "https://github.com/Daom-Projects/weber_django/issues"
 my-command = "my_package.cli:main"
 
 [dependency-groups]
-dev = [
-    "taskipy>=1.14.1",
-]
+dev = ["taskipy>=1.14.1"]
 
 [tool.taskipy.tasks]
 # 🧑‍💻 Superusuario
@@ -37,6 +35,15 @@ migrate = { cmd = "python manage.py migrate", help = "Aplica migraciones al esqu
 # 📦 Cargar y exportar datos
 fixtures-load = { cmd = "python manage.py loadall", help = "Carga datos de prueba desde fixtures definidos" }
 fixtures-export = { cmd = "python manage.py exportall", help = "Exporta datos actuales a archivos fixtures" }
+
+# 🆕 Crear nueva app
+newapp = { cmd = "python manage.py startapp", help = "Crear una nueva app Django" }
+
+# 📂 Crear proyecto Django
+newproject = { cmd = "django-admin startproject", help = "Crear un nuevo proyecto Django" }
+
+# 🗑️ Limpiar base de datos
+cleandb = { cmd = "python manage.py flush --no-input", help = "Elimina todos los datos de la base de datos" }
 
 # 🌐 Servidor de desarrollo
 runserver = { cmd = "python manage.py runserver", help = "Inicia el servidor Django en modo desarrollo" }
@@ -54,3 +61,19 @@ format = { cmd = "black .", help = "Formatea el código usando Black" }
 # 🚀 Hooks de prueba
 pre_test = { cmd = "task lint", help = "Revisa estilo antes de correr tests" }
 post_test = { cmd = "task format", help = "Formatea el código después de las pruebas" }
+
+# 📦 Instalación de dependencias
+install = { cmd = "pip install -e .", help = "Instala las dependencias del proyecto" }
+# 📦 Desinstalación de dependencias
+uninstall = { cmd = "pip uninstall -r requirements.txt", help = "Desinstala las dependencias del proyecto" }
+# 📦 Actualización de dependencias
+update = { cmd = "pip install --upgrade -r requirements.txt", help = "Actualiza las dependencias del proyecto" }
+
+# 📦 Generación de requirements.txt
+requirements = { cmd = "pip freeze > requirements.txt", help = "Genera el archivo requirements.txt con las dependencias actuales" }
+
+# 📂 Recopilar archivos estáticos
+collectstatic = { cmd = "python manage.py collectstatic --noinput", help = "Recopila archivos estáticos" }
+
+# 🗑️ Eliminar archivos estáticos
+cleanstatic = { cmd = "rm -rf staticfiles", help = "Elimina los archivos estáticos recopilados" }
