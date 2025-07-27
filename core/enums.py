@@ -190,3 +190,14 @@ class EstadoDevolucion(str, enum.Enum):
     @classmethod
     def choices(cls):
         return [(key.value, key.name.capitalize()) for key in cls]
+
+class TipoArchivo(str, enum.Enum):
+    IMAGEN = 'imagen'
+    DOCUMENTO = 'documento'
+    VIDEO = 'video'
+    AUDIO = 'audio'
+    OTRO = 'otro'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name.capitalize()) for key in cls]

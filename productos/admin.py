@@ -2,6 +2,7 @@
 
 from django.contrib import admin
 from .models import Categoria, Producto, ProductoCategoria
+from archivos.admin import ArchivoInline # Importamos el inline de archivos
 
 # --- Inlines ---
 # Este inline nos permitirá añadir/editar/eliminar las categorías de un producto
@@ -42,7 +43,7 @@ class ProductoAdmin(admin.ModelAdmin):
     list_filter = ('estado', 'categorias')
 
     # Aquí conectamos el inline que definimos arriba.
-    inlines = [ProductoCategoriaInline]
+    inlines = [ProductoCategoriaInline, ArchivoInline]
 
     # Para evitar confusión, excluimos el campo 'categorias' del formulario principal,
     # ya que ahora lo gestionamos a través del inline.

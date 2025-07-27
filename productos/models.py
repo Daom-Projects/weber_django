@@ -2,6 +2,7 @@
 from django.db import models
 from safedelete.models import SafeDeleteModel
 from core.enums import EstadoGeneral, EstadoProducto
+from django.contrib.contenttypes.fields import GenericRelation  # Importar GenericRelation
 
 class Categoria(SafeDeleteModel):
     """
@@ -70,6 +71,11 @@ class Producto(SafeDeleteModel):
         through='ProductoCategoria',
         related_name='productos'
     )
+
+    # --- RELACIÓN INVERSA GENÉRICA ---
+    # Le decimos al modelo Producto que puede tener 'archivos' asociados.
+    # El primer argumento es el modelo Archivo.
+    archivos = GenericRelation('archivos.Archivo')
 
     class Meta:
         verbose_name = "Producto"

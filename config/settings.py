@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'organizacion.apps.OrganizacionConfig',
     'usuarios.apps.UsuariosConfig',
     'transacciones.apps.TransaccionesConfig',
+    'archivos.apps.ArchivosConfig',
 
     # Paquetes de terceros
     'import_export',
