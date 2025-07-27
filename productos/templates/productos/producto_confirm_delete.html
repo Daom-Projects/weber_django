@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+  Confirmar Eliminación
+{% endblock %}
+
+{% block content %}
+  <h1>Confirmar Eliminación</h1>
+  <hr />
+  <p class="lead">
+    ¿Estás seguro de que deseas eliminar el producto <strong>"{{ object.nombre }}"</strong>?
+  </p>
+  <p class="text-danger">Esta acción marcará el producto como eliminado, pero se podrá recuperar desde el panel de administración.</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'productos:detalle' pk=object.pk %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+{% endblock %}

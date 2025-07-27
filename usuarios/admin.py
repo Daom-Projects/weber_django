@@ -3,7 +3,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
+# Importamos format_html para renderizar HTML de forma segura en el admin
+from django.utils.html import format_html
 from .models import PerfilUsuario
+from archivos.admin import ArchivoInline
 
 # Primero, definimos el inline para el perfil.
 # StackedInline se ve mejor que TabularInline cuando hay muchos campos.
@@ -17,6 +20,17 @@ class PerfilUsuarioInline(admin.StackedInline):
     verbose_name_plural = 'Perfiles de Usuario'
     # Para campos ForeignKey con muchos registros, el autocompletado es esencial.
     autocomplete_fields = ['municipio', 'sucursal']
+
+    # 1. Definimos los campos de solo lectura
+    readonly_fields = ('get_foto_perfil_preview',)
+
+    @admin.display(description='Vista Previa de Foto de Perfil')
+    def get_foto_perfil_preview(self, obj):
+        # Usamos la propiedad 'foto_perfil' que definimos en el modelo
+        foto = obj.foto_perfil
+        if foto and hasattr(foto.ruta_archivo, 'url'):
+            return format_html('<img src="{}" width="150" height="150" />', foto.ruta_archivo.url)
+        return "No hay foto de perfil."
 
 
 # Ahora definimos un nuevo UserAdmin que incluye nuestro inline.
@@ -51,3 +65,6 @@ class PerfilUsuarioAdmin(admin.ModelAdmin):
     search_fields = ('nombres', 'apellidos', 'documento', 'usuario__username')
     list_filter = ('rol_negocio', 'estado', 'sucursal')
     autocomplete_fields = ['usuario', 'municipio', 'sucursal']
+
+    # Incrustamos el formulario para subir archivos directamente aquí
+    inlines = [ArchivoInline]

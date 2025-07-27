@@ -2,8 +2,11 @@
 
 from django.db import models
 from django.contrib.auth.models import User # Importamos el modelo User de Django
+from django.contrib.contenttypes.fields import GenericRelation # Relacion genérica para archivos adjuntos
 from safedelete.models import SafeDeleteModel
 from core.enums import TipoDocumento, Genero, RolNegocio, EstadoUsuario
+
+
 
 class PerfilUsuario(SafeDeleteModel):
     """
@@ -60,6 +63,15 @@ class PerfilUsuario(SafeDeleteModel):
         choices=EstadoUsuario.choices(),
         default=EstadoUsuario.ACTIVO
     )
+
+    # --- RELACIÓN INVERSA GENÉRICA ---
+    archivos = GenericRelation('archivos.Archivo')
+
+    # --- Propiedad para acceso fácil ---
+    @property
+    def foto_perfil(self):
+        # Devuelve el primer archivo de tipo imagen asociado, o None.
+        return self.archivos.filter(tipo_archivo='imagen').first()
 
     class Meta:
         verbose_name = "Perfil de Usuario"
