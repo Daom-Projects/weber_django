@@ -1,24 +1,69 @@
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="utf-g">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Sistema de Inventarios{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+  <head>
+    <meta charset="utf-g" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      {% block title %}
+        Sistema de Inventarios
+      {% endblock %}
+    </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  </head>
+  <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="#">InventarioApp</a>
-        </div>
+      <div class="container">
+        <a class="navbar-brand" href="#">InventarioApp</a>
+      </div>
     </nav>
 
     <main class="container">
-        {% block content %}
-        {% endblock %}
+      {% block content %}
+
+      {% endblock %}
     </main>
 
+    <div id="dialog"></div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+
+    <script src="https://unpkg.com/htmx.org@2.0.6/dist/htmx.min.js" integrity="sha384-Akqfrbj/HpNVo8k11SXBb6TlBWmXXlYQrCSqEWmyKJe+hDm3Z/B2WVG4smwBkRVm" crossorigin="anonymous"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+      ;(function () {
+        // Seleccionamos el contenedor de diálogo una sola vez.
+        const dialogContainer = document.getElementById('dialog')
+        let currentModal = null // Variable para mantener la instancia del modal actual
+      
+        // 1. Lógica para MOSTRAR el modal después de que HTMX lo cargue.
+        // 'htmx:afterOnLoad' (versión 1.x) se reemplaza por 'htmx:load' (versión 2.0+)
+        dialogContainer.addEventListener('htmx:load', function () {
+          const modalElement = dialogContainer.querySelector('.modal')
+          if (modalElement) {
+            currentModal = bootstrap.Modal.getOrCreateInstance(modalElement)
+            currentModal.show()
+          }
+        })
+      
+        // 2. Lógica para CERRAR el modal cuando recibimos nuestro evento personalizado.
+        document.body.addEventListener('close-modal', () => {
+          if (currentModal) {
+            currentModal.hide()
+          }
+        })
+      
+        // 3. Lógica para LIMPIAR el contenedor después de que el modal se cierre.
+        // Se escucha el evento en el contenedor, ya que Bootstrap lo propaga hacia arriba.
+        // Cuando se cierra CUALQUIER modal dentro de #dialog, esto se ejecuta.
+        dialogContainer.addEventListener('hidden.bs.modal', () => {
+          // Vaciamos el contenido del div para que esté listo para el próximo modal.
+          dialogContainer.innerHTML = ''
+          currentModal = null // Reseteamos la instancia
+        })
+      })()
+    </script>
+  </body>
 </html>

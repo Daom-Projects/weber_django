@@ -1,4 +1,5 @@
 # productos/views.py
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -13,12 +14,30 @@ class ProductoListView(ListView):
     # 1. El modelo con el que vamos a trabajar.
     model = Producto
 
-    # 2. La plantilla que vamos a renderizar.
-    template_name = 'productos/lista_productos.html'
-
-    # 3. El nombre de la variable de contexto en la plantilla.
+    # 2. El nombre de la variable de contexto en la plantilla.
     # Por defecto es 'object_list', pero 'productos' es más intuitivo.
     context_object_name = 'productos'
+
+    # 3. Sobrescribimos get_queryset para manejar la búsqueda
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # Obtenemos el parámetro 'q' de la URL (?q=...)
+        query = self.request.GET.get('q')
+        if query:
+            # Filtramos por nombre O por código que contenga la búsqueda
+            queryset = queryset.filter(
+                Q(nombre__icontains=query) | Q(codigo__icontains=query) | Q(descripcion__icontains=query)
+            )
+        return queryset
+
+    # 4. Sobrescribimos get_template_names para elegir la plantilla correcta
+    def get_template_names(self):
+        # HTMX añade un encabezado 'HX-Request' a sus peticiones
+        if self.request.headers.get('HX-Request'):
+            # Si es una petición de HTMX, devolvemos solo la tabla
+            return ['productos/partials/tabla_productos.html']
+        # Si es una carga de página normal, devolvemos la página completa
+        return ['productos/lista_productos.html']
 
 class ProductoDetailView(DetailView):
     """
@@ -28,18 +47,33 @@ class ProductoDetailView(DetailView):
     template_name = 'productos/detalle_producto.html'
 
 class ProductoCreateView(CreateView):
-    """
-    Vista para crear un nuevo producto.
-    """
     model = Producto
-    # Le decimos a la vista que use nuestro formulario personalizado.
     form_class = ProductoForm
-    # Usaremos la misma plantilla para crear y para actualizar.
-    template_name = 'productos/producto_form.html'
-
-    # URL a la que se redirigirá al usuario después de crear el producto con éxito.
-    # reverse_lazy se usa aquí porque las URLs no se cargan hasta que Django las necesita.
+    # success_url se usará solo para peticiones no-HTMX
     success_url = reverse_lazy('productos:lista')
+
+    def get_template_names(self):
+        if self.request.headers.get('HX-Request'):
+            return ['productos/partials/producto_form_modal.html']
+        return ['productos/producto_form.html']
+
+    def form_valid(self, form):
+        # Si la petición es de HTMX, devolvemos una respuesta diferente
+        if self.request.headers.get('HX-Request'):
+            # Guardamos el objeto
+            self.object = form.save()
+            # Obtenemos todos los productos para actualizar la tabla
+            context = {'productos': Producto.objects.all()}
+            # Renderizamos la tabla parcial con la lista de productos actualizada
+            response = render(self.request, 'productos/partials/tabla_productos.html', context)
+            # Añadimos un encabezado especial para que HTMX sepa que debe actualizar la tabla
+            # y también que debe disparar un evento para cerrar el modal.
+            response['HX-Retarget'] = '#product-table-container'
+            response['HX-Trigger'] = 'close-modal' # Disparamos un evento personalizado
+            return response
+
+        # Si no es HTMX, comportamiento normal
+        return super().form_valid(form)
 
 class ProductoUpdateView(UpdateView):
     """

@@ -19,11 +19,24 @@
     </div>
 
     <div class="col-md-7">
-      <h1>{{ producto.nombre }}</h1>
-      <p class="text-muted">SKU: {{ producto.codigo|default:'N/A' }}</p>
-      <hr />
+<div class="col-md-7">
+        <h1>{{ producto.nombre }}</h1>
 
-      <h4>Descripción</h4>
+        <div class="d-flex align-items-center mb-2" x-data="{ copied: false }">
+            <p class="text-muted mb-0 me-2">
+                SKU: <strong x-ref="sku">{{ producto.codigo|default:"N/A" }}</strong>
+            </p>
+            <button class="btn btn-sm btn-outline-secondary" @click="
+                navigator.clipboard.writeText($refs.sku.innerText);
+                copied = true;
+                setTimeout(() => { copied = false }, 2000);
+            ">
+                <span x-show="!copied">Copiar</span>
+                <span x-show="copied" style="display: none;">¡Copiado!</span>
+            </button>
+        </div>
+        <hr>
+        <h4>Descripción</h4>
       <p>{{ producto.descripcion|linebreaks }}</p>
 
       <h4>Detalles de Inventario</h4>
