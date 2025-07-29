@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     # Paquetes de terceros
     'import_export',
     'safedelete',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -140,3 +142,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# --- CONFIGURACIÓN DE DJANGO REST FRAMEWORK ---
+REST_FRAMEWORK = {
+    # Clases de autenticación por defecto
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # Permite la autenticación a través de las sesiones de Django (ideal para la API navegable)
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    # Clases de permisos por defecto
+    'DEFAULT_PERMISSION_CLASSES': [
+        # Niega el permiso a cualquier usuario no autenticado.
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}

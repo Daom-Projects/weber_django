@@ -26,4 +26,7 @@ urlpatterns = [
     # path('transacciones/', include('transacciones.urls')),
     # path('ubicaciones/', include('ubicaciones.urls')),
     # path('archivos/', include('archivos.urls')),
+
+    # --- URLs DE LA API ---
+    path('api/productos/', include('productos.api_urls')),
 ]

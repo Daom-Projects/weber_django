@@ -7,6 +7,11 @@ from django.shortcuts import render
 from .models import Producto
 from .forms import ProductoForm
 
+# --- Importaciones para DRF ---
+from rest_framework import viewsets # Importamos viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly # Importar
+from .serializers import ProductoSerializer
+
 class ProductoListView(ListView):
     """
     Vista para mostrar una lista de todos los productos.
@@ -98,3 +103,12 @@ class ProductoDeleteView(DeleteView):
 
     # Después de eliminar, volvemos a la lista de productos.
     success_url = reverse_lazy('productos:lista')
+
+# --- VISTAS DE API ---
+class ProductoViewSet(viewsets.ModelViewSet):
+    queryset = Producto.objects.all()
+    serializer_class = ProductoSerializer
+    
+    # --- AÑADIR ESTA LÍNEA ---
+    # Sobrescribimos la política de permisos por defecto solo para esta vista.
+    permission_classes = [IsAuthenticatedOrReadOnly]
