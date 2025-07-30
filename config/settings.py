@@ -59,11 +59,15 @@ INSTALLED_APPS = [
     'safedelete',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
+    'django_vite',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # Añadir el middleware de CORS. Su posición es importante: antes de CommonMiddleware.
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -138,6 +142,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# --- AÑADIR ESTA LÍNEA ---
+# Directorio donde `collectstatic` reunirá todos los archivos estáticos para producción.
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -157,3 +165,34 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+# Lista de orígenes que tienen permitido hacer peticiones a nuestra API.
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+# --- DJANGO VITE SETTINGS ---
+# --- REEMPLAZAR LA CONFIGURACIÓN ANTERIOR DE DJANGO VITE POR ESTA ---
+DJANGO_VITE = {
+    "default": {
+        # Esta línea sigue siendo la clave para el modo desarrollo vs producción.
+        "dev_mode": DEBUG,
+
+        # --- LÍNEAS NUEVAS Y CRUCIALES ---
+        # Le decimos explícitamente a django-vite dónde encontrar el servidor de Vite.
+        "dev_server_host": "localhost",
+        "dev_server_port": 5173, # Este es el puerto por defecto de Vite
+
+        # Ruta al manifest.json para cuando estemos en producción (DEBUG = False).
+        "manifest_path": BASE_DIR / "frontend" / "dist" / "manifest.json",
+    }
+}
+
+# Incluimos esa carpeta en los directorios de archivos estáticos.
+STATICFILES_DIRS = [
+    BASE_DIR / "frontend" / "dist",
+]
+

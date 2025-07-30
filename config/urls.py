@@ -29,4 +29,7 @@ urlpatterns = [
 
     # --- URLs DE LA API ---
     path('api/productos/', include('productos.api_urls')),
+
+    # --- URL SPA ---
+    path('', include('core.urls')), # Incluimos las URLs de la app core
 ]

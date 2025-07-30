@@ -1,0 +1,11 @@
+{% extends 'core/base.html' %}
+{% load static django_vite %} {% block title %}
+  React Frontend
+{% endblock %}
+
+{% block content %}
+  <div id="root"></div>
+
+  {% vite_react_refresh %}
+  {% vite_asset 'src/main.jsx' %}
+{% endblock %}
