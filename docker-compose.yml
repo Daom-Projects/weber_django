@@ -1,0 +1,71 @@
+# docker-compose.yml
+
+version: '3.9'
+
+services:
+  # Servicio de la Base de Datos (PostgreSQL)
+  db:
+    image: postgres:16-alpine # Usamos la versión Alpine, más ligera
+    volumes:
+      # 'postgres_data' es un "volumen nombrado". Docker lo gestiona para persistir los datos.
+      - postgres_data:/var/lib/postgresql/data/
+
+        # --- ¡AQUÍ ESTÁ EL CAMBIO! ---
+    # Comentamos 'env_file' y ponemos las variables directamente.
+    # env_file:
+    #   - ./.env.db
+    environment:
+      POSTGRES_DB: weber_db
+      POSTGRES_USER: weber_user
+      POSTGRES_PASSWORD: supersecret123
+
+    expose:
+      - '5432' # Expone el puerto solo a otros servicios en la misma red, no a la máquina host.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U weber_user -d weber_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Servicio de la Aplicación Web (Django + Gunicorn)
+  web:
+    build: . # Construye la imagen usando el Dockerfile del directorio actual
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      # Montamos el código local en el contenedor para desarrollo (live reload)
+      - .:/app
+      # Montamos el volumen de estáticos para que collectstatic pueda escribir en él.
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    # Ya NO exponemos el puerto 8000 a la máquina host.
+    # El único que hablará con el exterior será Nginx.
+    # ports:
+    # Mapeamos el puerto 8000 de nuestra máquina al 8000 del contenedor
+    #   - "8000:8000"
+
+    env_file:
+      # Carga las variables desde nuestro .env principal
+      - ./.env
+    depends_on:
+      # Le dice a Docker que este servicio depende de la base de datos.
+      db:
+        condition: service_healthy # Esperará hasta que el healthcheck de 'db' pase.
+
+  # --- AÑADIR NUEVO SERVICIO NGINX ---
+  nginx:
+    build: ./nginx # Construye la imagen desde la carpeta 'nginx'
+    volumes:
+      # Montamos el mismo volumen para que Nginx pueda leer los archivos.
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    ports:
+      # Exponemos el puerto 80 de Nginx al puerto 80 de nuestra máquina.
+      - "80:80"
+    depends_on:
+      - web # Nginx no debe iniciarse hasta que el servicio web esté listo.
+
+volumes:
+  # Aquí se define el volumen nombrado que usará el servicio 'db'.
+  postgres_data:
+  static_volume: # Definimos el volumen compartido para archivos estáticos.
+  media_volume:  # Definimos el volumen compartido para archivos de medios.
